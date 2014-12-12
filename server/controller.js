@@ -8,9 +8,20 @@ module.exports =  {
         if (!req.session.userId) {
             res.redirect('/login');
         } else {
-            res.render('index', { movies: [
-                    { title: 'Aliens', release: '11/18/1989'}
-                ]});
+            var filter = {
+                'userId': req.session.userId
+                },
+                options = {
+                    sort: [['Title',1]]
+                };
+
+            client.db().collection('movies')
+                .find(filter, {}, options)
+                .toArray(function(err, movies) {
+                    if (err) { throw err; }
+
+                    res.render('index', movies);
+                });
         }
     },
     showLogin: function(req, res) {
@@ -22,23 +33,10 @@ module.exports =  {
         req.session.userId = 1;
         res.redirect('/');
     },
-    newMovie: function(req, res) {
-        res.render('add', {});
-    },
-    getMovies: function(req, res) {
-        var options = {
-                sort: [['Title',1]]
-            };
-
-        client.db().collection('movies')
-            .find({'userId': req.session.userId }, {}, options)
-            .toArray(function(err, scores) {
-                if (err) { throw err; }
-
-                res.json(scores);
-            });
-    },
     addMovie: function(req, res) {
+        //http://api.themoviedb.org/3/search/movie?query=[TITLE]&api_key=1a6f86ad423cc5544304a6fe19960bd3
+        //http://api.themoviedb.org/3/movie/[ID]?api_key=1a6f86ad423cc5544304a6fe19960bd3
+
         client.db().collection('movies').insert({
                 'userId': req.session.userId,
                 'movieId': req.body.id

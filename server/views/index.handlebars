@@ -1,4 +1,15 @@
-List of Movies:
+[Title search to add movie] [add]
+<hr size="1" />
+<!--
+http://api.themoviedb.org/3/search/movie?query=[TITLE]&api_key=1a6f86ad423cc5544304a6fe19960bd3
+
+<br/><br/>
+This should simply have a big text box that does a real-time search against TMDB and return a list of titles.  Selecting the title should populate a hidden field along with the title in the box.
+<br/><br/>
+Submit button should pass the hidden field which is used to do a lookup against the API by id and populate the data in the mongoDB database with the data returned.
+-->
+
+My MovieQ:
 <br/><br/>
 {{#each movies}}
     {{title}} | {{release}}
