@@ -1,7 +1,8 @@
 /* jshint node:true */
 'use strict';
 
-var client = require('./mongo_client');
+var client = require('./mongo_client'),
+    request = require('request');
 
 module.exports =  {
     index: function(req, res) {
@@ -9,18 +10,18 @@ module.exports =  {
             res.redirect('/login');
         } else {
             var filter = {
-                'userId': req.session.userId
+                'userId': req.session.userId,
+                'watched': false
                 },
                 options = {
-                    sort: [['Title',1]]
+                    sort: [['release_date',1]]
                 };
 
             client.db().collection('movies')
                 .find(filter, {}, options)
                 .toArray(function(err, movies) {
                     if (err) { throw err; }
-
-                    res.render('index', movies);
+                    res.render('index', { 'movies': movies });
                 });
         }
     },
@@ -28,24 +29,45 @@ module.exports =  {
         res.render('login');
     },
     processLogin: function(req, res) {
-        // TO DO: handle both scenarios where they are logging in OR registering:
+        var userObj = {email: req.body.email, password: req.body.password};
 
-        req.session.userId = 1;
-        res.redirect('/');
+        client.db().collection('users').find(userObj, {}, {}).toArray(function(err, users) {
+            if (users.length === 0) {
+                client.db().collection('users').insert(userObj, function(err, users){
+                    req.session.userId = users[0]._id;
+                    res.redirect('/');
+                });
+            } else {
+                req.session.userId = users[0]._id;
+                res.redirect('/');
+            }
+        });
     },
     addMovie: function(req, res) {
-        //http://api.themoviedb.org/3/search/movie?query=[TITLE]&api_key=1a6f86ad423cc5544304a6fe19960bd3
-        //http://api.themoviedb.org/3/movie/[ID]?api_key=1a6f86ad423cc5544304a6fe19960bd3
+        var apiUrl = [
+                'http://api.themoviedb.org/3/movie/',
+                req.body.movieid,
+                '?api_key=1a6f86ad423cc5544304a6fe19960bd3'
+            ].join('');
 
-        client.db().collection('movies').insert({
-                'userId': req.session.userId,
-                'movieId': req.body.id
-            }, function(err){
-                if (err) {
-                    console.log(err);
-                    res.status(500).json({error: 'There was an error!'});
-                }
-                res.json({success: true});
+        request({ method: 'GET', uri: apiUrl, json: {} },
+            function(error, response, movie) {
+                movie.userId = req.session.userId;
+                movie.watched = false;
+                client.db().collection('movies').insert(movie, function(err){
+                    if (err) {
+                        console.log(err);
+                    }
+                    res.redirect('/');
+                });
             });
+    },
+    watchedMovie: function(req, res){
+        client.db().collection('movies').update({userId: req.session.userId, id: req.params.id*1}, {$set: {watched: true}}, function(err, movie){
+            if (err) {
+                console.warn(err.message);
+            }
+            res.json(movie);
+        });
     }
 };

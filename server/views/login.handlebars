@@ -1,8 +1,26 @@
-You need to login first:<br/>
+
+<br/><br/><br/>
+
 <form action="/login" method="post">
-<button type="submit" class="btn btn-primary" name="login">Login Now!</button>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 form-group">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <input type="text" name="email" id="loginEmail" class="form-control" placeholder="Your Email Address">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <input type="password" id="loginPass" name="password" class="form-control" placeholder="Your Password">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button type="submit" name="login" class="btn btn-primary btn-block">Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
-- or -
-<br/><br/>
-Register a new account:<br/>
-[Form stuff...]

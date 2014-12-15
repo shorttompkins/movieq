@@ -10,6 +10,7 @@ module.exports.initialize = function(app, router) {
     router.post('/login', controller.processLogin);
 
     router.post('/movie', controller.addMovie);
+    router.post('/movie/:id/watched', controller.watchedMovie);
 
     app.use('/', router);
 };
