@@ -1,6 +1,3 @@
-/* jshint node:true */
-'use strict';
-
 var client = require('./mongo_client'),
     request = require('request');
 

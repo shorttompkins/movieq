@@ -1,0 +1,59 @@
+<br/>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <form action="/movie" method="post" class="row">
+            <div class="col-md-9">
+                <div class="form-group">
+                    <input
+                        type="text"
+                        class="form-control input-lg"
+                        id="title"
+                        value=""
+                        placeholder="" />
+                    <input
+                        type="hidden"
+                        name="movieid"
+                        value="" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <button
+                        id="add"
+                        class="btn btn-lg btn-default btn-block">Add Movie</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<hr size="1" />
+
+{{#each movies}}
+    <div class="row movie">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="row">
+                <div class="col-md-3">
+                    <img
+                        src="https://image.tmdb.org/t/p/w185/{{poster_path}}"
+                        class="img-rounded img-responsive"/>
+                </div>
+                <div class="col-md-9">
+                    <h2>
+                        <span class="review">{{vote_average}} ({{vote_count}})</span>
+                        {{title}}
+                    </h2>
+
+                    <p class="overview well">{{overview}}</p>
+
+                    <a class="watched" data-id="{{id}}">
+                        <i class="fa fa-square-o"></i> Watched
+                    </a>
+
+                    <p><strong>Release:</strong> {{release_date}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr size="1" />
+{{/each}}
