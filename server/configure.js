@@ -9,7 +9,7 @@ var path = require('path'),
     morgan = require('morgan');
 
 module.exports = function(app) {
-    app.set('port', process.env.PORT || 8080);
+    app.set('port', process.env.PORT || 3000);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'handlebars');
 
