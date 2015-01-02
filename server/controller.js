@@ -54,7 +54,7 @@ module.exports =  {
         var apiUrl = [
                 'http://api.themoviedb.org/3/movie/',
                 req.body.movieid,
-                '?api_key=1a6f86ad423cc5544304a6fe19960bd3'
+                '?api_key=YOUR_API_KEY_HERE'
             ].join('');
 
         request({

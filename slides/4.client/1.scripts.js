@@ -5,7 +5,7 @@ $(function(){
             var apiUrl = [
                 'http://api.themoviedb.org/3/search/movie?query=',
                 req.term,
-                '&api_key=1a6f86ad423cc5544304a6fe19960bd3'
+                '&api_key=YOUR_API_KEY_HERE'
             ].join('');
 
             $.get(apiUrl, function(data){
